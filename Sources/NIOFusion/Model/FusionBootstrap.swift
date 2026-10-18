@@ -89,8 +89,8 @@ private extension FusionBootstrap {
     /// - Parameters:
     ///   - channel: the `NIOAsyncChannel`
     private func append(channel: NIOAsyncChannel<ByteBuffer, ByteBuffer>) async throws -> Void {
-        defer { Task { await registry.remove(id: id) } }
         let framer = FusionFramer(), id = UUID(), local = channel.channel.localAddress, remote = channel.channel.remoteAddress
+        defer { Task { await registry.remove(id: id) } }
         try await channel.executeThenClose { inbound, outbound in
             await registry.append(id: id, outbound: outbound)
             for try await buffer in inbound {
